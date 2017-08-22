@@ -1,29 +1,28 @@
-## Behavioral Cloning Project
+## Advanced Lane Detection Project
 ---
 
 The primary goals of this project are as follows:
-* Use the udacity provided simulator to collect data of good driving behavior
-* Build a convolution neural network in Keras that mimics good driving behavior
-* Based on image obtained from center, left and right cameras, steer angle is predicted
-* Test that the model successfully drives car around the track without leaving the road in fully autonomous fashion
+* Create a lane detection pipeline that can handle curved lanes, shadows on road as well as changes in pavement color
+* Apply the lane detection pipeline on sample images succesfully
+* Apply the developed pipeline on a udacity provided test video successfully
 
 [//]: # (Image References)
 
-[image1]: ./examples/FlipDemonstrate.PNG "ImageAugmentation"
+[image1]: ./output_images/CameraCal.PNG "CameraCal"
 [image2]: ./examples/NvidiaCNNarch.PNG "NvidiaCNNArchitecture"
 [image3]: ./examples/placeholder_small.png "Recovery Image"
 
 **Description of files**
 
-* model.ipynb contains the script to create and train the model
-* model.h5 contains the final trained convolution neural network model - weights, parameters etc...
-* drive.py is a utility function for driving the car in autonomous mode on udacity simulator
-* MyRun.mp4 is a video demonstrating the car driving in fully autonomous mode by predicting steer angles based on input images via the model contained in "model.h5"
+* AdvancedLaneDetection_Sankar.ipynb is the jupyter notebook that contains the code
+* project_video_output.mp4 is the video generated via the developed image processing pipeline
 
-**Building the driver model**
+**Algorithm**
 ---
 
-As a first step, the car was driven in training mode using the Udacity simulator to record data for optimal driving behavior. Optimal in this case is to keep the car in the center of the lane as much as possible. Not being a gamer myself plus not having a joystick, it was actually very hard to drive around the test track being in the center of the lane :-) 
+The pin-hole camera that is used to generate the images needs to be calibrated to work in the real world. Therefore the first step was to use a set of calibration images to obtain the camera calibration matrices. The opencv library was used to perform the calibration. Sample image shown below.
+
+![alt text][image1]
 
 A sample training data set was provided by Udacity. Since bad training data would result in a garbage in - garbage out case and to get to the crux of the problem, I  relied on the Udacity provided data-set for the project. The dataset primarily consists of two files:
 
@@ -74,8 +73,6 @@ for image,measurement in zip(images,measurements):
     images_aug.append(cv2.flip(image,1))
     measurements_aug.append(measurement*-1.0)
 ```
-
-![alt text][image1]
 
 
 In total, the baseline data set size was 24108. With image augmentation via the flip technique, the size doubled to 48216. This was sufficient to train the network.

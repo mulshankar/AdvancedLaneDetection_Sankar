@@ -9,8 +9,9 @@ The primary goals of this project are as follows:
 [//]: # (Image References)
 
 [image1]: ./output_images/CameraCal.PNG "CameraCal"
-[image2]: ./examples/NvidiaCNNarch.PNG "NvidiaCNNArchitecture"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
+[image2]: ./output_images/Distortion.PNG "Distortion"
+[image3]: ./output_images/GradientThresholding.png "Gradient Threshold"
+[image4]: ./output_images/ColorThresholding.png "Gradient Threshold"
 
 **Description of files**
 
@@ -20,11 +21,25 @@ The primary goals of this project are as follows:
 **Algorithm**
 ---
 
-The pin-hole camera that is used to generate the images needs to be calibrated to work in the real world. Therefore the first step was to use a set of calibration images to obtain the camera calibration matrices. The opencv library was used to perform the calibration. Sample image shown below.
+The pin-hole camera that is used to generate the images needs to be calibrated to work in the real world. Therefore the first step was to use a set of calibration images to obtain the camera calibration matrices. The opencv library was used to perform the calibration. Sample image shown below identifying all the corners on the chess board.
 
 ![alt text][image1]
 
-A sample training data set was provided by Udacity. Since bad training data would result in a garbage in - garbage out case and to get to the crux of the problem, I  relied on the Udacity provided data-set for the project. The dataset primarily consists of two files:
+Once the camera calibration matrices are generated, the images are undistorted. Distortion addresses the curved edges that are captured by the pin hole camera and flattens the content of the image. Sample of an image being undistorted is shown below.
+
+![alt text][image2]
+
+**Thresholding**
+
+The next step is to start detecting lanes. The two primary knobs used for lane detection is edge detection and color detection. The first step was to experiment with the edge detection scheme. The sobel operators are used which calculate the gradient in x and y directions. In addition to just absolute thresholds in a single direction (x or y), direction and magnitude of the detected line segments are also useful. Image below shows the effect of gradient thresholding on a raw image. 
+
+![alt text][image3]
+
+In addition to the gradient thresholding, it is possible to use the RGB or HSV (Hue, Lightness and Saturation) channels to perform some color thresholding. Below is an exampple of lane detection purely by color thresholding. 
+
+![alt text][image4]
+
+
 
 1. An IMG directory that captures left, center and right camera images mounted on the car while driving around the track
 2. A drivinglog.csv file that includes path to images captured above along with measurements like steer angle, brake position, pedal and vehicle speed

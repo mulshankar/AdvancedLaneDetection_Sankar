@@ -97,15 +97,25 @@ While the above pipeline was tested successfully on a subset of images, the key 
             badlines=False
             lane_width_movingavg=0.8*lane_width_curr+0.2*lane_width_movingavg
 	```
-- This served as an excellent tool to identify problems in lane detection. If lane width changes dramatically, that clearly identifies a problem in the thresholding scheme. Sample image shown below:
+- This served as an excellent tool to identify problems in lane detection. If lane width changes dramatically, that clearly identifies a problem in the thresholding scheme. Sample image shown below. Note the sudden drop in lane width around frame 162. 
 	
 ![alt text][image12]
 	
 	
 - If no line pixels are detected, just return the original image.
 - One of the challenging areas in the video is when the pavement color changes and shadows falling on the road. A video demonstrating the problem is shown [here](https://www.youtube.com/watch?v=daJ_YtJVrBg)
-		
 
+[![Project Video](https://img.youtube.com/vi/LJc_GhtzSCY/0.jpg)](https://www.youtube.com/watch?v=daJ_YtJVrBg)
+
+- When no lane pixels are detected, two key things were done:
+	1) Perform sliding window search on the histogram filter again
+	2) Pass the last known good lane to the algorithm for stability
+	
+
+**Area of Improvement**
+
+- Thresholding does not seem to work well on the challenge videos. Could refine it more
+- Sharper turns need to be handled better as in the harder challenge video
 
 
 

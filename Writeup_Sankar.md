@@ -19,6 +19,7 @@ The primary goals of this project are as follows:
 [image9]: ./output_images/SlidingWindows.PNG "SlidingWindows"
 [image10]: ./output_images/LaneDetectMargin.PNG "LaneDetectMargin"
 [image11]: ./output_images/RadiusOfCurvature.PNG "RadiusOfCurvature"
+[image12]: ./output_images/WidthCurrMA.PNG "WidthCurrMA"
 
 
 **Description of files**

@@ -114,7 +114,7 @@ While the above pipeline was tested successfully on a subset of images, the key 
 	2) Pass the last known good lane to the algorithm for stability
 	
 
-**Area of Improvement**
+**Areas for Improvement**
 
 - Thresholding does not seem to work well on the challenge videos. Could refine it more
 - Sharper turns need to be handled better as in the harder challenge video

@@ -82,9 +82,9 @@ The above pipeline was configured to run on a video that was provided by Udacity
 
 **Challenges**
 
-While the above pipeline was tested on a set of test images, the key challenge while operating on a video is the fact that there are frames where lane markings are not clearly visible. This could result in a case where no lanes are detected. Also, it is possible that no lane pixels were detected in the specified margin from the previous image. In order to address these issues, few mechanisms were established:
+While the above pipeline was tested successfully on a subset of images, the key challenge while operating on a video is the fact that there are frames where lane markings are not clearly visible. This could result in a case where no lanes are detected. Also, it is possible that no lane pixels were detected in the specified margin from the previous image. In order to address these issues, few mechanisms were established:
 
-	*Calculate lane width from the current frame. Establish a moving average of the lane width using a simple mechanism as mentioned below:
+- Calculate lane width from the current frame. Establish a moving average of the lane width using a simple mechanism as mentioned below:
 	
 	```sh
         if lane_width_movingavg==0:
@@ -97,16 +97,13 @@ While the above pipeline was tested on a set of test images, the key challenge w
             badlines=False
             lane_width_movingavg=0.8*lane_width_curr+0.2*lane_width_movingavg
 	```
-	* This served as an excellent tool to identify problems in lane detection. If lane width changes dramatically, that clearly identifies a problem in the thresholding scheme. Sample image shown below:
+- This served as an excellent tool to identify problems in lane detection. If lane width changes dramatically, that clearly identifies a problem in the thresholding scheme. Sample image shown below:
 	
-	![alt text][image12]
-	
-	
-	* If no line pixels are detected, just return the original image.
-	* One of the challenging areas in the video is when the pavement color changes and shadows falling on the road. 
+![alt text][image12]
 	
 	
-	A video demonstrating the problem is shown here: https://www.youtube.com/watch?v=daJ_YtJVrBg
+- If no line pixels are detected, just return the original image.
+- One of the challenging areas in the video is when the pavement color changes and shadows falling on the road. A video demonstrating the problem is shown [here](https://www.youtube.com/watch?v=daJ_YtJVrBg)
 		
 
 

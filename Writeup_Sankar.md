@@ -12,7 +12,14 @@ The primary goals of this project are as follows:
 [image2]: ./output_images/Distortion.PNG "Distortion"
 [image3]: ./output_images/GradientThresholding.PNG "Gradient Threshold"
 [image4]: ./output_images/ColorThresholding.PNG "Color Threshold"
-[image4]: ./output_images/CombinedThresholding.PNG "Combined Threshold"
+[image5]: ./output_images/CombinedThresholding.PNG "Combined Threshold"
+[image6]: ./output_images/MaskedCombinedThreshold.PNG "MaskedCombinedThreshold"
+[image7]: ./output_images/Perspective.PNG "PerspectiveTransform"
+[image8]: ./output_images/histogram.PNG "histogram"
+[image9]: ./output_images/SlidingWindows.PNG "SlidingWindows"
+[image10]: ./output_images/LaneDetectMargin.PNG "LaneDetectMargin"
+[image11]: ./output_images/RadiusOfCurvature.PNG "RadiusOfCurvature"
+
 
 **Description of files**
 
@@ -40,118 +47,39 @@ In addition to the gradient thresholding, it is possible to use the RGB or HSV (
 
 ![alt text][image4]
 
-Logical operations between the two thresholded images  are done to make the scheme more robust.
+Logical operations between the two thresholded images  are done to make the scheme more robust. Image below shows the gradient and color thresholded images shown above merged together by an AND operation. 
+
+![alt text][image5]
+
+In addition to merging the two thresholded images, a region of interest masking also helps to filter out unwanted pixels. Image below shows the noise reduction between the combined thresholded image when masked by a region of interest.
+
+![alt text][image6]
+
+Once the lane lines are identified in an image, a perspective transform is applied. The idea of a perspective transform is to get a bird's eye view of the road. This is very useful in determining curvature between the lanes. The opencv perspective transform function is used to obtain a transformation matrix that maps a set of source and destination points. Image below shows a perspective transform being applied on our image. 
+
+![alt text][image7]
+
+**Lane Detection**
+
+Using the above techniques, the set of pixels that contribute to a line are identified. The next step is to take this further and apply a histogram filter to detect sharp changes in pixel density as shown below. 
+
+![alt text][image8]
+
+The peaks of the histogram provides a good starting point to look for the line pixels. A moving window scheme is implemented to scan through the image looking for non-zero pixels. The window re-positions based on pixel density. Once all the pixels are obtained, the numpy polyfit function is used to fit a second order polynomial. Image below shows implementation of the window scheme. 
+
+![alt text][image9]
+
+The sliding windows although is an expensive operation. Once the lanes are detected using the sliding windows, the next image will not change radically. It is possible to search around a specified margin from the previous lane to detect the lanes from new image. 
+
+![alt text][image10]
+
+For visualization purposes, the obtained lanes are transformed back to the original image. The inverse of the perspective transform is calculated to do this. also the cv2.fillpoly function is used to clear make the lane width. The radius of curvature of the road and distance of the vehicle from the center of the road is calculated and displayed on the image. 
+
+![alt text][image11]
 
 
-In addition to merging the two thresholded images, a region of interest masking also helps to filter out unwanted pixels. Image below shows an example of an image that com
-
-1. An IMG directory that captures left, center and right camera images mounted on the car while driving around the track
-2. A drivinglog.csv file that includes path to images captured above along with measurements like steer angle, brake position, pedal and vehicle speed
-
-As mentioned before, this project primarily focuses on using an image to predict what the steer angle needs to be. Simply put, 
 
 ```sh
 X_train=images
 Y_train=steering_angle
 ```
-
-**Data Augmentation**
-
-While initial testing with center images alone was done to verify basic functionality, it became obvious that more training data is needed to make the network predict driving behavior better. A simple way to do that was to use images from all cameras. 
-
-While images from left and right camera were being analyzed, a small correction factor indicating steer angle that will drive it to the center was added. For example, for an image from the left camera, the correction factor would steer the car slightly to the right. Code that performed this correction is shown below
-
-```sh
-
-for line in lines:
-    for i in range(3):
-        source_path=line[i]
-        filename=source_path.split('/')[-1]
-        current_path='/home/carnd/P3_sankar/myData/data/IMG/'+ filename
-        image=cv2.imread(current_path)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        if image == None:
-            print("Invalid image:" , current_path)
-        else:
-            images.append(image)
-            measurement = float(line[3])
-            if i==1:
-                measurements.append(measurement+0.2) ## for a left image, steer right a bit
-            elif i==2:
-                measurements.append(measurement-0.2) ## for a right image, steer left a bit
-            else:
-                measurements.append(measurement)   ## for a center image, do nothing     
-```
-
-An interesting thing to note was the driving direction on the track - clockwise vs anti-clockwise could bias the steer towards left or right. It is important to add this data to the training set to help the network perform better. One way to acquire this data is to actually drive around the track in anti-clockwise fashion. Cv2 has a very useful feature in the "flip" method that performs the same task in software. The figure below demonstrates use of this technique. The steer angle being a mirror image could simply be negated to create the correct label.
-
-```sh
-for image,measurement in zip(images,measurements):
-    images_aug.append(image)    
-    measurements_aug.append(measurement)
-    images_aug.append(cv2.flip(image,1))
-    measurements_aug.append(measurement*-1.0)
-```
-
-
-In total, the baseline data set size was 24108. With image augmentation via the flip technique, the size doubled to 48216. This was sufficient to train the network.
-
-**Network Architecture**
----
-
-Various network architectures were tested all the way from simple linear models to slightly complex architectures via convolutions. Nvidia published a paper that details their convolutional network architecture for mimicing human behavior.
-
-https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf
-
-The architecture had the non-linearities needed for solving the problem and being tried and tested, I implemented this architecture for the problem. 
-
-**Pre-Processing**
-
-A "lambda" layer was added to normalize the image before training the model. The lambda layer in keras is essentially similar to adding python code that does the normalizing. An important advantage to using the lambda layer is that while testing the network on validation images, it goes through the same pre-processing without having to explicitly pre-process the feed images again. Normalizing code shown below:
-
-```sh
-model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=(160,320,3)))
-```
-
-In addition to normalizing, image was also cropped to remove surrounding environment data that just added to noise. The base input image was of shape 160x320x3 (RGB). The keras cropping2D function was used to reduce the image down to 70x25x3. 
-
-```sh
-model.add(Cropping2D(cropping=((70,25),(0,0))))
-```
-
-The Nvidia CNN architecture is shown below.
-
-![alt text][image2]
-
-The architecture was implemented in keras. 
-
-```sh
-model.add(Convolution2D(24,5,5,subsample=(2,2),activation="relu"))
-model.add(Convolution2D(36,5,5,subsample=(2,2),activation="relu"))
-model.add(Convolution2D(48,5,5,subsample=(2,2),activation="relu"))
-model.add(Convolution2D(64,3,3,activation="relu"))
-model.add(Convolution2D(64,3,3,activation="relu"))
-model.add(Flatten())
-model.add(Dense(100))
-model.add(Dense(50))
-model.add(Dense(10))
-model.add(Dense(1))
-```
-
-Post normalizing, the network consists of 4 convolutional layers and 3 fully connected layers. The training parameters chosen were:
-
-```sh
-Optimizer=Adam with no specific learning rate
-Loss Function='mse' as in mean squared error
-validation split=0.2
-Num of epochs=3
-
-```
-All the training was done on Amazon Web Sever using a GPU. Therefore, no generators were used. If done on a local machine without GPU, generators would have been necessary.
-
-**Final Results**
----
-
-The trained model parameters were saved and transferred to the local machine. By using the drive.py function and using "autonomous mode" on the simulator, the car was driven on the track using network predicted steer angles. The results were good and the vehicle did not leave the track even once. 
-
-The video.py function was used to create the "MyRun".mp4 video. The frames per second parameter was set at 30.

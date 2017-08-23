@@ -25,7 +25,7 @@ The primary goals of this project are as follows:
 **Description of files**
 
 * AdvancedLaneDetection_Sankar.ipynb is the jupyter notebook that contains the code
-* project_video_output.mp4 is the video generated via the developed image processing pipeline
+* ProjectOutputFinal_Sankar.mp4 is the video generated via the developed image processing pipeline
 
 **Algorithm**
 ---
@@ -78,7 +78,9 @@ For visualization purposes, the obtained lanes are transformed back to the origi
 
 ![alt text][image11]
 
-The above pipeline was configured to run on a video that was provided by Udacity. The video has straight lanes, curved lanes, changes in pavement color as well as shadows on road. The established pipeline effectively identified lane markings and ensures no divergence. The video is also available here: https://youtu.be/d5KURcDlJ-s
+The above pipeline was configured to run on a video that was provided by Udacity. The video has straight lanes, curved lanes, changes in pavement color as well as shadows on road. The established pipeline effectively identified lane markings and ensures no divergence. The video is also available [here](https://youtu.be/d5KURcDlJ-s)
+
+[![Final Video](http://i3.ytimg.com/vi/d5KURcDlJ-s/maxresdefault.jpg)](https://youtu.be/d5KURcDlJ-s)
 
 **Challenges**
 
@@ -105,7 +107,7 @@ While the above pipeline was tested successfully on a subset of images, the key 
 - If no line pixels are detected, just return the original image.
 - One of the challenging areas in the video is when the pavement color changes and shadows falling on the road. A video demonstrating the problem is shown [here](https://www.youtube.com/watch?v=daJ_YtJVrBg)
 
-[![Project Video](https://img.youtube.com/vi/LJc_GhtzSCY/0.jpg)](https://www.youtube.com/watch?v=daJ_YtJVrBg)
+[![ProblemArea Video](https://img.youtube.com/vi/LJc_GhtzSCY/0.jpg)](https://www.youtube.com/watch?v=daJ_YtJVrBg)
 
 - When no lane pixels are detected, two key things were done:
 	1) Perform sliding window search on the histogram filter again

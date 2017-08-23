@@ -10,9 +10,9 @@ The primary goals of this project are as follows:
 
 [image1]: ./output_images/CameraCal.PNG "CameraCal"
 [image2]: ./output_images/Distortion.PNG "Distortion"
-[image3]: ./output_images/GradientThresholding.png "Gradient Threshold"
-[image4]: ./output_images/ColorThresholding.png "Color Threshold"
-[image4]: ./output_images/CombinedThresholding.png "Combined Threshold"
+[image3]: ./output_images/GradientThresholding.PNG "Gradient Threshold"
+[image4]: ./output_images/ColorThresholding.PNG "Color Threshold"
+[image4]: ./output_images/CombinedThresholding.PNG "Combined Threshold"
 
 **Description of files**
 
@@ -36,11 +36,11 @@ The next step is to start detecting lanes. The two primary knobs used for lane d
 
 ![alt text][image3]
 
-In addition to the gradient thresholding, it is possible to use the RGB or HSV (Hue, Lightness and Saturation) channels to perform some color thresholding. Below is an exampple of lane detection purely by color thresholding. 
+In addition to the gradient thresholding, it is possible to use the RGB or HSV (Hue, Lightness and Saturation) channels of an image to perform some color thresholding. Below is an example of lane detection purely by color thresholding. 
 
 ![alt text][image4]
 
-One could perform logical operations between the two thresholded images to obtain a better combined lane detection scheme. 
+Logical operations between the two thresholded images  are done to make the scheme more robust.
 
 
 In addition to merging the two thresholded images, a region of interest masking also helps to filter out unwanted pixels. Image below shows an example of an image that com

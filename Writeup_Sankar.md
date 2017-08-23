@@ -11,7 +11,8 @@ The primary goals of this project are as follows:
 [image1]: ./output_images/CameraCal.PNG "CameraCal"
 [image2]: ./output_images/Distortion.PNG "Distortion"
 [image3]: ./output_images/GradientThresholding.png "Gradient Threshold"
-[image4]: ./output_images/ColorThresholding.png "Gradient Threshold"
+[image4]: ./output_images/ColorThresholding.png "Color Threshold"
+[image4]: ./output_images/CombinedThresholding.png "Combined Threshold"
 
 **Description of files**
 
@@ -39,7 +40,10 @@ In addition to the gradient thresholding, it is possible to use the RGB or HSV (
 
 ![alt text][image4]
 
+One could perform logical operations between the two thresholded images to obtain a better combined lane detection scheme. 
 
+
+In addition to merging the two thresholded images, a region of interest masking also helps to filter out unwanted pixels. Image below shows an example of an image that com
 
 1. An IMG directory that captures left, center and right camera images mounted on the car while driving around the track
 2. A drivinglog.csv file that includes path to images captured above along with measurements like steer angle, brake position, pedal and vehicle speed

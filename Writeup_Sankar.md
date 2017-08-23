@@ -34,13 +34,13 @@ The pin-hole camera that is used to generate the images needs to be calibrated t
 
 ![alt text][image1]
 
-Once the camera calibration matrices are generated, the images are undistorted. Distortion addresses the curved edges that are captured by the pin hole camera and flattens the content of the image. Sample of an image being undistorted is shown below.
+Once the camera calibration matrices are generated, the images are undistorted. Undistortion addresses the curved edges that are captured by the pin hole camera and flattens the content of the image. Sample of an image being undistorted is shown below.
 
 ![alt text][image2]
 
 **Thresholding**
 
-The next step is to start detecting lanes. The two primary knobs used for lane detection is edge detection and color detection. The first step was to experiment with the edge detection scheme. The sobel operators are used which calculate the gradient in x and y directions. In addition to just absolute thresholds in a single direction (x or y), direction and magnitude of the detected line segments are also useful. Image below shows the effect of gradient thresholding on a raw image. 
+The next step is to start detecting lane pixels. The two primary knobs used for lane detection is edge detection and color detection. The first step involved experimenting with the edge detection scheme. The sobel operators are used which calculate the gradient in x and y directions. In addition to just absolute thresholds in a single direction (x or y), direction and magnitude of the detected line segments are also useful. Image below shows the effect of gradient thresholding on a raw image. 
 
 ![alt text][image3]
 
@@ -48,11 +48,11 @@ In addition to the gradient thresholding, it is possible to use the RGB or HSV (
 
 ![alt text][image4]
 
-Logical operations between the two thresholded images  are done to make the scheme more robust. Image below shows the gradient and color thresholded images shown above merged together by an AND operation. 
+Logical operations between the two thresholded images  are done to make the scheme more robust. Image below shows the gradient and color thresholded images shown above merged together by an AND operation. Green pixels are from gradient thresholding and blue is from color thresholding.
 
 ![alt text][image5]
 
-In addition to merging the two thresholded images, a region of interest masking also helps to filter out unwanted pixels. Image below shows the noise reduction between the combined thresholded image when masked by a region of interest.
+In addition to merging the two thresholded images, a region of interest masking helps to filter out unwanted pixels. Image below shows the noise reduction between the combined thresholded image when masked by a region of interest.
 
 ![alt text][image6]
 
@@ -78,9 +78,9 @@ For visualization purposes, the obtained lanes are transformed back to the origi
 
 ![alt text][image11]
 
-The above pipeline was configured to run on a video that was provided by Udacity. The video has straight lanes, curved lanes, changes in pavement color as well as shadows on road. The established pipeline effectively identified lane markings and ensures no divergence. The video is also available [here](https://youtu.be/d5KURcDlJ-s)
+The above pipeline was configured to run on a video that was provided by Udacity. The video has straight lanes, curved lanes, changes in pavement color as well as shadows on road. The established pipeline effectively identified lane markings and ensures no divergence. Please click on the image below to see the video. The video is also available [here](https://youtu.be/d5KURcDlJ-s)
 
-[![Final Video](http://i3.ytimg.com/vi/d5KURcDlJ-s/maxresdefault.jpg)](https://youtu.be/d5KURcDlJ-s)
+[![Final Video](https://img.youtube.com/vi/d5KURcDlJ-s/0.jpg)](https://youtu.be/d5KURcDlJ-s)
 
 **Challenges**
 
@@ -107,7 +107,7 @@ While the above pipeline was tested successfully on a subset of images, the key 
 - If no line pixels are detected, just return the original image.
 - One of the challenging areas in the video is when the pavement color changes and shadows falling on the road. A video demonstrating the problem is shown [here](https://www.youtube.com/watch?v=daJ_YtJVrBg)
 
-[![ProblemArea Video](https://img.youtube.com/vi/LJc_GhtzSCY/0.jpg)](https://www.youtube.com/watch?v=daJ_YtJVrBg)
+[![ProblemArea Video](https://img.youtube.com/vi/d5KURcDlJ-s/0.jpg)](https://www.youtube.com/watch?v=daJ_YtJVrBg)
 
 - When no lane pixels are detected, two key things were done:
 	1) Perform sliding window search on the histogram filter again
